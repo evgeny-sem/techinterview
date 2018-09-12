@@ -38,7 +38,12 @@ import java.util.List;
  * You can use any 3rd party libs in your application.
  * Any java version (>=8).
  * Code must be tested (framework is up to you).
- *
+ * 
+ * PLEASE KEEP IN MIND THAT IT CAN BE THOUSANDS OF PRODUCT IMPLEMENTATIONS, NOT JUST 2!!! INSTANCE OF SOLUTION IS BAD AND IS NOT GOING TO 
+ * WORK IN A REAL WORLD!
+ * 
+ * Product classes (base class and implementations) can be changed to resolve the task, Any new methods, properties or anything else can be added there.
+ * 
  * If you are familiar with Git, please do work in a separate branch and create a pull request with your changes.
  */
 public class ProductListProcessor {
