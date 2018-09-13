@@ -1,7 +1,12 @@
 package com.techinterview.onlinestore.service;
 
+import com.techinterview.onlinestore.domain.BackPack;
 import com.techinterview.onlinestore.domain.Product;
+import com.techinterview.onlinestore.domain.SmartPhone;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,8 +57,63 @@ public class ProductListProcessor {
      * Make String representation of providd product list.
      * @param products list of the products that needs to be converted to String
      * @return String representation of the provided list.
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws IllegalAccessException 
      */
-    public String productListToString(List<Product> products) {
-        return null;
+    public String productListToString(List<Product> products) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    	StringBuffer op = new StringBuffer();
+		for(Product pr : products){
+			Class<?> c = pr.getClass();
+			Method mGuid = c.getSuperclass().getDeclaredMethod("getGuid");
+			Method mName = c.getSuperclass().getDeclaredMethod("getName");
+			op.append(mName.invoke(pr));
+			op.append(" (");
+			op.append(mGuid.invoke(pr));
+			op.append(")");
+			for(Method me : c.getDeclaredMethods()){
+				if(me.getName().startsWith("get")){
+					op.append(", "+me.getName().substring(3)+": ");
+					op.append(me.invoke(pr).toString());
+					//System.out.println(me.invoke(pr));
+				}
+			}
+			op.append("\n");
+		}
+        return op.toString();
     }
+    
+    public static void main(String[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+		// Test Case
+    	List<Product> l = new ArrayList<Product>();
+		BackPack b1 = new BackPack("1", "b1");
+		b1.setCapacity(10);
+		b1.setColor("Blue");
+		b1.setMaxContentWeight(20);
+		l.add(b1);
+		SmartPhone s1 = new SmartPhone("2", "Note 9");
+		s1.setColor("Blue");
+		s1.setManufacturer("Samsung");
+		s1.setNumberOfCPUs(8);
+		s1.setRamSize(4);
+		s1.setScreenResolution("6.3\"");
+		l.add(s1);
+		BackPack b2 = new BackPack("3", "b2");
+		b2.setCapacity(5);
+		b2.setColor("Red");
+		b2.setMaxContentWeight(15);
+		l.add(b2);
+		SmartPhone s2 = new SmartPhone("4", "S9 Plus");
+		s2.setColor("Black");
+		s2.setManufacturer("Samsung");
+		s2.setNumberOfCPUs(10);
+		s2.setRamSize(8);
+		s2.setScreenResolution("5.8\"");
+		l.add(s2);
+		
+		ProductListProcessor p = new ProductListProcessor();
+		System.out.println(p.productListToString(l));
+	}
 }
