@@ -59,7 +59,7 @@ public class ProductListProcessor {
      * @throws IllegalAccessException 
      */
     public String productListToString(List<Product> products) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-    	StringBuilder op = new StringBuilder();
+    	StringBuffer op = new StringBuffer();
 		for(Product pr : products){
 			Class<?> c = pr.getClass();
 			Method mGuid = c.getSuperclass().getDeclaredMethod("getGuid");
@@ -81,7 +81,8 @@ public class ProductListProcessor {
     }
     
     public static void main(String[] args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		List<Product> l = new ArrayList<Product>();
+		// Test Case
+    	List<Product> l = new ArrayList<Product>();
 		BackPack b1 = new BackPack("1", "b1");
 		b1.setCapacity(10);
 		b1.setColor("Blue");
@@ -90,8 +91,8 @@ public class ProductListProcessor {
 		SmartPhone s1 = new SmartPhone("2", "Note 9");
 		s1.setColor("Blue");
 		s1.setManufacturer("Samsung");
-		s1.setNumberOfCPUs(10);
-		s1.setRamSize(8);
+		s1.setNumberOfCPUs(8);
+		s1.setRamSize(4);
 		s1.setScreenResolution("6.3\"");
 		l.add(s1);
 		BackPack b2 = new BackPack("3", "b2");
@@ -106,7 +107,6 @@ public class ProductListProcessor {
 		s2.setRamSize(8);
 		s2.setScreenResolution("5.8\"");
 		l.add(s2);
-		//System.out.println(l);
 		
 		ProductListProcessor p = new ProductListProcessor();
 		System.out.println(p.productListToString(l));
