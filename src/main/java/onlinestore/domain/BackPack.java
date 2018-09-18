@@ -1,4 +1,4 @@
-package com.techinterview.onlinestore.domain;
+package onlinestore.domain;
 
 /**
  * Backpack product definition.
