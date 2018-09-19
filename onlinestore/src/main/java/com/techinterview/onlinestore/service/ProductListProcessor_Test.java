@@ -21,6 +21,7 @@ public class ProductListProcessor_Test {
 	//=new SmartPhone("100-200-399", "Iphone");
 	
 	@BeforeClass
+	
     public void runBeforeClassMethod() {
 		// This method will be run once
 		phone3=new SmartPhone("100-200-300", "Iphone");
