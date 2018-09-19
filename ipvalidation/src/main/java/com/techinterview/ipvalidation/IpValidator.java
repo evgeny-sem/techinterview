@@ -1,5 +1,10 @@
 package com.techinterview.ipvalidation;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javafx.util.Pair;
+
 public class IpValidator {
 
     /**
@@ -37,7 +42,71 @@ public class IpValidator {
      * @throws IllegalArgumentException if either ipAddress or cidrRange definitions is invalid.
      * @return true if provided IP address is covered by the CIDR range; false otherwise.
      */
-    public static boolean validateIpAddress(String ipAddress, String cidrRange) {
-        return false;
-    }
+	public static boolean validateIpAddress(String ipAddress, String cidrRange) {
+		  //Reference
+		  //https://stackoverflow.com/questions/9622967/how-to-see-if-an-ip-address-belongs-inside-of-a-range-of-ips-using-cidr-notation
+		  
+		  Pattern ptn = Pattern.compile("^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+	        Matcher mtch = ptn.matcher(ipAddress);
+	        if(mtch.find())
+	        {
+
+	    		int addressInt = convertAddressToInt(ipAddress);
+	    		Pair<Integer, Integer> cidrBits = splitCidrIpAddress(cidrRange);
+	    		int mask = cidrBits.getValue();
+	    		return (addressInt & mask) == (cidrBits.getKey() & mask);
+	        }
+	        else
+	        {
+	        	throw new IllegalArgumentException("Invalid argument");
+	        }
+	    
+	
+
+}
+private static Pair<Integer, Integer> splitCidrIpAddress(String cidrRange) {
+	int slash = cidrRange.indexOf('/');
+	int subnet = Integer.parseInt(cidrRange.substring(slash + 1));
+	if(subnet<0 || subnet>32) throw new IllegalArgumentException("Invalid Range");
+	int bits = convertAddressToInt(cidrRange.substring(0, slash));
+	int mask = ~((1 << (32 - subnet)) - 1);
+
+	return new Pair<Integer, Integer>(bits, mask);
+	}
+
+private static int convertAddressToInt(String ipAddress) {
+		// TODO Auto-generated method stub
+	String[] parts = ipAddress.split("\\."); 
+	if( parts.length != 4 )
+	{
+		throw new IllegalArgumentException("IP Address did not have 4 parts");
+	}
+
+	int results = Integer.parseInt(parts[3]) & 0xFF;
+	results |= (Integer.parseInt(parts[2]) & 0xFF) << 8;
+	results |= (Integer.parseInt(parts[1]) & 0xFF) << 16;
+	results |= (Integer.parseInt(parts[0]) & 0xFF) << 24;
+
+	return results;
+	}
+
+
+
+public static void main(String args[]) throws Exception
+{
+	System.out.println("Is valid? "+validateIpAddress("192.168.0.0", "192.168.0.0/24"));
+	//Output Is valid? true
+	
+	System.out.println("Is valid? "+validateIpAddress("100.0.0.0", "100.0.0.0/16"));
+	//Output Is valid? true
+	
+	System.out.println("Is valid? "+validateIpAddress("10.10.0.0", "10.10.0.0/32"));
+	//Output Is valid? true
+	
+	System.out.println("Is valid? "+validateIpAddress("10.10.0.1", "10.10.0.2/32"));
+	//Output Is valid? false
+	
+	System.out.println("Is valid? "+validateIpAddress("10.10.0.1", "10.10,0.2/32"));
+	//Output is IllegalArgumentException: IP Address did not have 4 parts
+}
 }
