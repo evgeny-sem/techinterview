@@ -85,41 +85,6 @@ public class ProductListProcessor {
 		return sb.toString();
 }
 
-public String productListToJSON(List<Product> products) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException 
-{
-		StringBuilder sb=new StringBuilder();
-	for(Object value:products) {
-		Class<? extends Object> cls=value.getClass();
-		sb.append("{");
-		Method superClassMethod1 = cls.getSuperclass().getMethod("getName");
-		sb.append("\""+superClassMethod1.getName().substring(3)+"\""+": "+"\"");
-		sb.append(superClassMethod1.invoke(value));
-		sb.append("\""+",");
-		
-		Method superClassMethod2 = cls.getSuperclass().getMethod("getGuid");
-		sb.append("\""+superClassMethod2.getName().substring(3)+"\""+": "+"\"");
-		sb.append(superClassMethod2.invoke(value));
-		sb.append("\"");
-		
-		// Using reflection concept in Java, all the methods of the class are found
-		for(Method methodName : cls.getDeclaredMethods()){
-			//System.out.println(methodName);
-			if(methodName.getName().startsWith("get")){
-				sb.append(", "+"\""+methodName.getName().substring(3)+"\""+": ");
-				if( methodName.invoke(value) instanceof String ) {
-					sb.append("\""+methodName.invoke(value)+"\"");
-					}
-				else {
-					sb.append(methodName.invoke(value));
-				}
-				
-				
-			}
-		}
-		sb.append("}"+"\n");
-	}
-	return sb.toString();
-	}
 
 public static void main(String args[]) throws Exception{
 	
@@ -159,6 +124,5 @@ list1.add(bag2);
 System.out.println(obj.productListToString(list1));
 System.out.println(obj.productListToString(list2)); // empty list
 
-//System.out.println(obj.productListToJSON(list1));
 }
 }
