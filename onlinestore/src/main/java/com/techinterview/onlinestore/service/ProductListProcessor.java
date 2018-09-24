@@ -3,7 +3,15 @@ package com.techinterview.onlinestore.service;
 import com.techinterview.onlinestore.domain.Product;
 
 import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+//Added this classes for testcase
+import com.techinterview.onlinestore.domain.BackPack;
+import com.techinterview.onlinestore.domain.SmartPhone;
 /**
  * Implement the function productListToString that does conversion of provided list of products to text representation
  * of this list in this way.
@@ -54,6 +62,37 @@ public class ProductListProcessor {
      * @return String representation of the provided list.
      */
     public String productListToString(List<Product> products) {
-        return null;
+        String result="";
+        for (Product p : products)
+		 {
+			 /*
+			 for (Field field : p.getClass().getDeclaredFields()) {
+			     field.setAccessible(true);
+			     String name = field.getName();
+			     Object value = field.get(p);
+			     System.out.printf("%s: %s%n", name, value);
+			     result = result + name + value;
+			 }*/
+			 Gson gson = new Gson();
+			 result =  result + "\n" + gson.toJson(p.toString());
+			 
+			 /*Gson gs = new Gson();
+			 JsonElement element = gs.fromJson(gs.toJson(p.toString()), JsonElement.class);
+			 JsonObject obj = element.getAsJsonObject();
+			 entities.add(obj);*/
+		 }
+		 return result;
     }
+    
+    public static void main(String[] args)
+	 {
+        //sample data for testing
+		 List<Product> prodList = Arrays.asList(new BackPack("111", "Item1"),
+				 new BackPack("222", "Item2"),
+				 new SmartPhone("333", "Item3"),
+				 new SmartPhone("444", "Item4"),
+				 new SmartPhone("555", "Item5")
+				);
+		 System.out.print(productListToString(prodList));
+	 }
 }
