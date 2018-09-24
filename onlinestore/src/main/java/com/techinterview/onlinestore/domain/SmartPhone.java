@@ -74,4 +74,16 @@ public class SmartPhone extends Product {
     public void setScreenResolution(String screenResolution) {
         this.screenResolution = screenResolution;
     }
+    
+    @Override
+	public String toString() {
+		
+		return super.toString() 
+				+ ", " + "manufacturer: " + manufacturer 
+				+ ", " + "color: \"" + color + "\"" 
+				+ ", " + "numberOfCPUs: " + numberOfCPUs
+				+ ", " + "ramSize: " + ramSize
+				+ ", " + "screenResolution: " + screenResolution;
+	}
+    
 }
