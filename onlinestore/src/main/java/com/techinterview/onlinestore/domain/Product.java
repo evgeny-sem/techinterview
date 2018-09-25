@@ -28,4 +28,9 @@ public abstract class Product {
     public String getName() {
         return name;
     }
+     @Override
+	public String toString() {
+		//return "Product [guid=" + guid + ", name=" + name + "]";
+		return name + " (" + guid + ")";
+	}
 }
